@@ -1,1 +1,1 @@
-Hello This is the start of my projects where I practice my skills coding!!
+Hello, this is the start of my projects where I practice my skills coding!!
