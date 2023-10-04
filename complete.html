@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    
+    h1 {
+      margin-top: 20px;
+    }
+    
+    label {
+      display: block;
+      margin: 10px 0;
+    }
+    
+    input[type="range"] {
+      width: 80%;
+      margin: 0 auto;
+    }
+    
+    .checkbox {
+      margin: 10px auto;
+    }
+    
+    #passwordOutput {
+      font-size: 20px;
+      margin-top: 20px;
+    }
+    </style>
+  <script>
+  
+   //define characters, numbers, and symbols using lists
+var characters = ['a', "b", "c","d" ,"e","f",
+"g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"
+,'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 
+'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+var numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+var symbols = ['!', '@', '#', '$', '%', '^', '&', '*','-','/','+','='];
+
+
+// when user changes slider on UI, generatePassword function updates
+onEvent("lengthSlider", "change", function() {
+  var length = getProperty("lengthSlider", "value");
+  var numbersOn = getProperty("numberCheckbox", "checked");
+  var symbolsOn = getProperty("symbolCheckbox", "checked");
+  var password = generatePassword(length, numbersOn, symbolsOn);
+  setProperty("passwordOutput", "text", password);
+});
+
+// when user changes the values of the number
+// checkbox on UI, generatePassword function updates
+onEvent("numberCheckbox", "change", function() {
+  var length = getProperty("lengthSlider", "value");
+  var numbersOn = getProperty("numberCheckbox", "checked");
+  var symbolsOn = getProperty("symbolCheckbox", "checked");
+  var password = generatePassword(length, numbersOn, symbolsOn);
+  setProperty("passwordOutput", "text", password);
+});
+
+// when user changes the values of the symbol
+// checkbox on UI, generatePassword function updates
+onEvent("symbolCheckbox", "change", function() {
+  var length = getProperty("lengthSlider", "value");
+  var numbersOn = getProperty("numberCheckbox", "checked");
+  var symbolsOn = getProperty("symbolCheckbox", "checked");
+  var password = generatePassword(length, numbersOn, symbolsOn);
+  setProperty("passwordOutput", "text", password);
+});
+
+
+//generatePassword is the main function with 3 parameters:
+//length,numbersOn, and symbolsOn
+function generatePassword(length, numbersOn, symbolsOn) {
+// the var passwordChars contains the list characters
+var passwordChars = characters;
+if (numbersOn) {
+// merges two lists into one in the output text area
+// merges the characters with the number lists into one in the output text area
+passwordChars = passwordChars.concat(numbers);
+  }
+if (symbolsOn) {
+// merges the characters with the symbol lists into one in the output text area
+passwordChars = passwordChars.concat(symbols);
+    }
+var password = '';
+for (var i = 0; i < length; i++) {
+    //generate randomIndex based on the length of the passwordChars
+    var randomIndex = Math.round(Math.random() * (passwordChars.length - 1));
+    // get character at the random index
+    var randomChar = passwordChars[randomIndex];
+    password = password + randomChar;
+    }
+// return the generated password
+return password;
+}
+
+  </script>
+</head>
+<body>
+  <h1>Password Generator</h1>
+  
+  <label for="lengthSlider">Password Length:</label>
+  <input type="range" id="lengthSlider" min="4" max="50" value="8">
+  
+  <label>
+    <input type="checkbox" id="numberCheckbox"> Include Numbers
+  </label>
+  
+  <label>
+    <input type="checkbox" id="symbolCheckbox"> Include Symbols
+  </label>
+  
+  <p>Your Generated Password:</p>
+  <p id="passwordOutput"></p>
+
+  <button class="copy-button" id="copyButton">Copy to Clipboard</button>
+  
+  <script>
+    // Attach event listeners to UI elements
+    document.getElementById("lengthSlider").addEventListener("input", updatePassword);
+    document.getElementById("numberCheckbox").addEventListener("change", updatePassword);
+    document.getElementById("symbolCheckbox").addEventListener("change", updatePassword);
+    
+    // Function to update the generated password based on UI elements
+    function updatePassword() {
+      var length = document.getElementById("lengthSlider").value;
+      var numbersOn = document.getElementById("numberCheckbox").checked;
+      var symbolsOn = document.getElementById("symbolCheckbox").checked;
+      var password = generatePassword(length, numbersOn, symbolsOn);
+      document.getElementById("passwordOutput").textContent = password;
+    }
+  </script>
+   <script>
+    // Attach event listeners to UI elements
+    document.getElementById("lengthSlider").addEventListener("input", updatePassword);
+    document.getElementById("numberCheckbox").addEventListener("change", updatePassword);
+    document.getElementById("symbolCheckbox").addEventListener("change", updatePassword);
+    
+    // Function to update the generated password based on UI elements
+    function updatePassword() {
+      var length = document.getElementById("lengthSlider").value;
+      var numbersOn = document.getElementById("numberCheckbox").checked;
+      var symbolsOn = document.getElementById("symbolCheckbox").checked;
+      var password = generatePassword(length, numbersOn, symbolsOn);
+      document.getElementById("passwordOutput").textContent = password;
+    }
+
+    // Function to copy the generated password to clipboard
+    document.getElementById("copyButton").addEventListener("click", function() {
+      var passwordText = document.getElementById("passwordOutput").textContent;
+      var tempInput = document.createElement("input");
+      tempInput.value = passwordText;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      alert("Password copied to clipboard: " + passwordText);
+    });
+  </script>
+</body>
+</html>
